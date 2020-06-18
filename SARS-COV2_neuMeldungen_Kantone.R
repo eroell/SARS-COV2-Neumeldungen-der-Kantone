@@ -76,15 +76,16 @@ ggplot(data = conf, aes(x = Datum, y = GemeldeteNeuinfektionen) ) +
   theme(axis.text.x = element_text(angle = 90 , hjust = 0, vjust = 0.5) ) +
   xlab("Datum") +
   ylab("Neugemeldete SARS-COV2 Infektionen")# + 
-  #coord_cartesian(ylim = c(-1, max(conf$GemeldeteNeuinfektionen)))
+ # scale_y_discrete( breaks = 0:max(conf$GemeldeteNeuinfektionen))+
+ # coord_cartesian(ylim = c(-1, max(conf$GemeldeteNeuinfektionen +1)))
 
-print(
-  paste(
-    "Verwendet wurden die gesammelten Daten vom statistischen Amts des Kantons Zürich (Stand ",
-    as.Date( max(conf$Datum) ), 
-    ", unter https://raw.githubusercontent.com/openZH/covid_19/master). Der letzte Tag ist rausgenommen, um keinen unvollständig erfassten Tag drin zu haben", by = ""
-  )
-  )
+# print(
+#   paste(
+#     "Verwendet wurden die gesammelten Daten vom statistischen Amts des Kantons Zürich (Stand ",
+#     as.Date( max(conf$Datum) ), 
+#     ", unter https://raw.githubusercontent.com/openZH/covid_19/master). Der letzte Tag ist rausgenommen, um keinen unvollständig erfassten Tag drin zu haben", by = ""
+#   )
+ # )
 dev.off()
 
 
