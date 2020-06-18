@@ -61,7 +61,7 @@ conf$Datum <- lubridate::ymd(conf$Datum) # A more handy date format
 conf <- filter(conf, conf$Datum+14 > max(conf$Datum))
 
 # Ignore today and yesterday, as to prevent incomplete data displaying
-conf <- filter(conf, conf$Datum+1 < max(conf$Datum))
+conf <- filter(conf, conf$Datum+1 <= max(conf$Datum))
 
 a <- as.Date(max(conf$Datum))
 a
