@@ -28,18 +28,44 @@ library(ggplot2)
 url_cases  <- "https://raw.githubusercontent.com/openZH/covid_19/master/COVID19_Fallzahlen_CH_total.csv"
 cases <- read.csv(url(url_cases), header=T, sep=",", stringsAsFactors=FALSE, encoding="UTF-8")
 # SchlÃ¼sselfile Grossregionen
-setwd('C:/Users/Eljas/Documents/Datenanalysen/covid19_ownScripts')
-grossregion <- read.csv("KantonGrossregion.csv", header=T, sep=",", stringsAsFactors=FALSE, encoding="UTF-8")
+#setwd('C:/Users/Eljas/Documents/Datenanalysen/covid19_ownScripts')
+#grossregion <- read.csv("KantonGrossregion.csv", header=T, sep=",", stringsAsFactors=FALSE, encoding="UTF-8")
 
 #confirmed cases by canton
 conf<-with(cases, tapply(ncumul_conf, list(date, abbreviation_canton_and_fl), sum))
 
 #first row of data: 0 except for ticino
 conf[1,]<-ifelse(is.na(conf[1,]), 0, conf[1,])
+
 #replace NA with last number before
 conf<-na.locf(as.xts(conf))
 # decumulate
 conf<-apply(conf,2, diff)
+
+
+###########################################################################
+## By me:
+## for total cases in Switzerland
+
+# Addiere Fälle der einzelenen Kantone auf
+totalCH <- data.frame(totalCasesCH = rowSums(conf))
+
+# "long format", vor allem erhalte ich so das Datum als Spalte
+totalCH <- melt(as.matrix(totalCH))
+
+# Lösche mittlere Spalte
+totalCH <- totalCH[ , c(1,3)]
+
+# Umbenennung der Spalten
+names(totalCH)[names(totalCH) == "Var1"] <- "Datum"
+
+# Behalte nur Daten der letzten Tage, ohne heute
+names(totalCH)[names(totalCH) == "value"] <- "GemeldeteNeuinfektionen"
+totalCH$Datum <- lubridate::ymd(totalCH$Datum)
+totalCH <- filter(totalCH, Datum + 20 > max(Datum) & Datum + 1 <= max(Datum))
+
+###########################################################################
+
 
 #long format
 conf<-melt(as.matrix(conf))
@@ -54,6 +80,7 @@ names(conf)[names(conf) == "Var1"] <- "Datum"
 names(conf)[names(conf) == "value"] <- "GemeldeteNeuinfektionen"
 # Ignore FL
 conf <- filter(conf, Var2 != "FL")
+
 
 # Only use the last 10 days: (Might alter do ignore also the last 2 days, as potentially incomplete data)
 conf <- arrange(conf,Datum)
@@ -88,7 +115,9 @@ ggplot(data = conf, aes(x = Datum, y = GemeldeteNeuinfektionen) ) +
  # )
 dev.off()
 
-#######################################################################
+ggplot(data = totalCH, aes (x = Datum, y = GemeldeteNeuinfektionen)) +
+  geom_line() +
+  geom_point()
 #######################################################################
 # ### Ich auskommentiert
 # #dead cases by canton
