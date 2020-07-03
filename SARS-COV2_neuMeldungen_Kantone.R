@@ -62,7 +62,7 @@ names(totalCH)[names(totalCH) == "Var1"] <- "Datum"
 # Behalte nur Daten der letzten Tage, ohne heute
 names(totalCH)[names(totalCH) == "value"] <- "GemeldeteNeuinfektionen"
 totalCH$Datum <- lubridate::ymd(totalCH$Datum)
-totalCH <- filter(totalCH, Datum + 20 > max(Datum) & Datum + 1 <= max(Datum))
+totalCH <- filter(totalCH, Datum + 60 > max(Datum) & Datum + 1 <= max(Datum))
 
 ###########################################################################
 
@@ -91,8 +91,6 @@ conf <- filter(conf, conf$Datum+14 > max(conf$Datum))
 conf <- filter(conf, conf$Datum+1 <= max(conf$Datum))
 
 a <- as.Date(max(conf$Datum))
-a
-paste("asdf", a)
 ##############################################################################
 ###### Plotting
 ##############################################################################
