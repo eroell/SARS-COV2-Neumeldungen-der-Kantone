@@ -94,7 +94,7 @@ a <- as.Date(max(conf$Datum))
 ##############################################################################
 ###### Plotting
 ##############################################################################
-##setwd("C:/Users/Eljas/Documents/Datenanalysen/covid19_ownScripts")
+##setwd("C:/Users/Eljas/Documents/@Projektunterstützungsmaterial/Datenanalysen/covid19_ownScripts")
 pdf("Neugemeldete Faelle der Kantone.pdf",width=7,height=5)
 ggplot(data = conf, aes(x = Datum, y = GemeldeteNeuinfektionen) ) +
   geom_point() +
